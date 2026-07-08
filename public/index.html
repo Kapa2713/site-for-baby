@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Гендер-пати: прогноз</title>
+    <meta
+      name="description"
+      content="Развлекательный прогноз для гендер-пати с виртуальными суммами и текущими коэффициентами."
+    >
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body>
+    <main class="page-shell">
+      <section class="hero" aria-labelledby="page-title">
+        <div class="hero__media" aria-hidden="true"></div>
+        <div class="hero__content">
+          <p class="eyebrow">гендер-пати</p>
+          <h1 id="page-title">Кто будет: мальчик или девочка?</h1>
+          <p class="hero__text">
+            Сделайте игровой прогноз. Все суммы виртуальные, без онлайн-оплаты и реальных выигрышей.
+          </p>
+        </div>
+      </section>
+
+      <section class="workspace" aria-label="Прогноз">
+        <div class="odds-panel" aria-live="polite">
+          <div class="panel-heading">
+            <span>Текущие коэффициенты</span>
+            <span id="betting-status" class="status-pill">загрузка</span>
+          </div>
+
+          <div class="odds-grid">
+            <article class="odds-card odds-card--boy">
+              <span class="odds-card__label">Мальчик</span>
+              <strong id="boy-odds">2.00</strong>
+              <small id="boy-total">0 виртуально</small>
+            </article>
+
+            <article class="odds-card odds-card--girl">
+              <span class="odds-card__label">Девочка</span>
+              <strong id="girl-odds">2.00</strong>
+              <small id="girl-total">0 виртуально</small>
+            </article>
+          </div>
+        </div>
+
+        <form id="prediction-form" class="prediction-form" novalidate>
+          <div class="form-heading">
+            <h2>Ваш прогноз</h2>
+            <p>Коэффициент зафиксируется в момент подтверждения.</p>
+          </div>
+
+          <div class="field-grid">
+            <label>
+              <span>Имя</span>
+              <input id="first-name" name="firstName" type="text" maxlength="40" autocomplete="given-name" required>
+            </label>
+
+            <label>
+              <span>Фамилия</span>
+              <input id="last-name" name="lastName" type="text" maxlength="40" autocomplete="family-name" required>
+            </label>
+          </div>
+
+          <fieldset class="gender-picker">
+            <legend>Выберите вариант</legend>
+            <label>
+              <input type="radio" name="gender" value="boy" required>
+              <span>Мальчик</span>
+            </label>
+            <label>
+              <input type="radio" name="gender" value="girl" required>
+              <span>Девочка</span>
+            </label>
+          </fieldset>
+
+          <label>
+            <span>Виртуальная сумма</span>
+            <input id="amount" name="amount" type="number" min="1" max="1000000" step="1" inputmode="numeric" required>
+          </label>
+
+          <button id="submit-button" type="submit">Подтвердить прогноз</button>
+          <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
+        </form>
+      </section>
+
+      <section class="summary-strip" aria-label="Итоговая статистика">
+        <div>
+          <span>После отправки</span>
+          <strong>коэффициенты обновятся на сайте</strong>
+        </div>
+        <div>
+          <span>Источник данных</span>
+          <strong>Google Таблица организаторов</strong>
+        </div>
+        <div>
+          <span>Формат</span>
+          <strong>игровая механика без платежей</strong>
+        </div>
+      </section>
+    </main>
+
+    <script src="app.js"></script>
+  </body>
+</html>
+
