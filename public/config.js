@@ -1,6 +1,6 @@
 window.SITE_FOR_BABY_CONFIG = {
-  // Вставь сюда URL опубликованного Google Apps Script Web App.
-  // Пока строка пустая, сайт работает в демо-режиме через localStorage.
-  APPS_SCRIPT_URL: '',
+  // URL опубликованного Google Apps Script Web App.
+  // Этот URL публичный и нужен сайту для отправки прогнозов.
+  // Секреты и EVENT_CODE здесь не хранятся.
+  APPS_SCRIPT_URL: 'https://script.google.com/macros/s/AKfycbwmsWE-tMGMO6XuFLuGbAY3bGLXvgzHJTUD-TpqiVJJgsVTxF-FlVUo8Ssc2OGeV3P8/exec',
 };
-
