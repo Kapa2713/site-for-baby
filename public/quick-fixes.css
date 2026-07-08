@@ -1,0 +1,13 @@
+body {
+  background:
+    linear-gradient(180deg, rgba(251, 247, 242, 0.1), rgba(251, 247, 242, 0.88) 58%, rgba(251, 247, 242, 0.96)),
+    url("assets/hero-gender-party.png") center / cover fixed no-repeat;
+}
+
+.page-shell {
+  background: transparent;
+}
+
+.hero {
+  background: transparent;
+}
