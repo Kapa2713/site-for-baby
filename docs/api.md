@@ -27,7 +27,7 @@ GET APPS_SCRIPT_URL?action=getState
 }
 ```
 
-Публичный ответ не должен содержать список участников, прогнозов или докупок.
+Публичный ответ не должен содержать список участников, прогнозов, докупок или служебные настройки.
 
 ## POST submitPrediction
 
@@ -38,10 +38,13 @@ GET APPS_SCRIPT_URL?action=getState
   "action": "submitPrediction",
   "firstName": "Анна",
   "lastName": "Иванова",
+  "eventCode": "event-code-placeholder",
   "gender": "girl",
   "amount": 500
 }
 ```
+
+`eventCode` проверяется в Apps Script по значению `EVENT_CODE` из Script Properties. Реальный код события не хранится в репозитории.
 
 Ответ:
 
@@ -55,8 +58,8 @@ GET APPS_SCRIPT_URL?action=getState
     "oddsAtBet": 2
   },
   "odds": {
-    "boy": 2.2,
-    "girl": 1.83
+    "boy": 2.5,
+    "girl": 1.67
   },
   "totals": {
     "boy": 0,
@@ -72,7 +75,7 @@ GET APPS_SCRIPT_URL?action=getState
 ```json
 {
   "ok": false,
-  "error": "Введите имя"
+  "error": "Неверный код события"
 }
 ```
 

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="ru">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Гендер-пати: экран итогов</title>
+    <meta name="description" content="Экран итогов для показа статистики на гендер-пати.">
+    <link rel="stylesheet" href="styles.css">
+  </head>
+  <body class="display-body">
+    <main class="display-screen">
+      <section class="display-hero" aria-labelledby="display-title">
+        <p class="eyebrow">экран итогов</p>
+        <h1 id="display-title">Прогнозы гостей</h1>
+        <p id="display-status" class="display-status">загрузка</p>
+      </section>
+
+      <section class="display-grid" aria-label="Текущая статистика">
+        <article class="display-card display-card--boy">
+          <span>Мальчик</span>
+          <strong id="display-boy-odds">2.00</strong>
+          <small id="display-boy-total">0 виртуально</small>
+        </article>
+
+        <article class="display-card display-card--girl">
+          <span>Девочка</span>
+          <strong id="display-girl-odds">2.00</strong>
+          <small id="display-girl-total">0 виртуально</small>
+        </article>
+      </section>
+
+      <p id="display-message" class="display-message" role="status" aria-live="polite"></p>
+      <a class="back-link" href="index.html">Вернуться к форме</a>
+    </main>
+
+    <script src="config.js"></script>
+    <script src="display.js"></script>
+  </body>
+</html>
+

@@ -101,6 +101,8 @@ function submitPrediction_(payload) {
   }
 
   const data = validatePrediction_(payload);
+  validateEventCode_(data.eventCode);
+
   const now = new Date();
   const spreadsheet = getSpreadsheet_();
   const participantsSheet = spreadsheet.getSheetByName(SHEETS.PARTICIPANTS);
@@ -190,6 +192,7 @@ function getPredictionTotals_() {
 function validatePrediction_(payload) {
   const firstName = normalizeName_(payload.firstName);
   const lastName = normalizeName_(payload.lastName);
+  const eventCode = normalizeEventCode_(payload.eventCode);
   const gender = String(payload.gender || '').trim();
   const amount = Number(payload.amount);
 
@@ -203,6 +206,14 @@ function validatePrediction_(payload) {
 
   if (firstName.length > 40 || lastName.length > 40) {
     throw publicError_('Имя и фамилия должны быть короче 40 символов');
+  }
+
+  if (!eventCode) {
+    throw publicError_('Введите код события');
+  }
+
+  if (eventCode.length > 24) {
+    throw publicError_('Код события должен быть короче 24 символов');
   }
 
   if (gender !== 'boy' && gender !== 'girl') {
@@ -220,13 +231,32 @@ function validatePrediction_(payload) {
   return {
     firstName,
     lastName,
+    eventCode,
     gender,
     amount: Math.round(amount * 100) / 100,
   };
 }
 
+function validateEventCode_(eventCode) {
+  const expectedEventCode = normalizeEventCode_(
+    PropertiesService.getScriptProperties().getProperty('EVENT_CODE')
+  );
+
+  if (!expectedEventCode) {
+    throw new Error('Не задан EVENT_CODE');
+  }
+
+  if (eventCode !== expectedEventCode) {
+    throw publicError_('Неверный код события');
+  }
+}
+
 function normalizeName_(value) {
   return String(value || '').trim().replace(/\s+/g, ' ');
+}
+
+function normalizeEventCode_(value) {
+  return String(value || '').trim();
 }
 
 function findOrCreateParticipant_(sheet, firstName, lastName, now) {
@@ -319,3 +349,4 @@ function publicError_(message) {
 function getPublicErrorMessage_(error) {
   return error && error.publicMessage ? error.publicMessage : 'Не удалось сохранить прогноз';
 }
+

@@ -1,4 +1,5 @@
-const APPS_SCRIPT_URL = '';
+const CONFIG = window.SITE_FOR_BABY_CONFIG || {};
+const APPS_SCRIPT_URL = String(CONFIG.APPS_SCRIPT_URL || '').trim();
 const LOCAL_STORAGE_KEY = 'site-for-baby-demo-state';
 const SEED_AMOUNT = 1000;
 
@@ -6,6 +7,7 @@ const elements = {
   form: document.querySelector('#prediction-form'),
   firstName: document.querySelector('#first-name'),
   lastName: document.querySelector('#last-name'),
+  eventCode: document.querySelector('#event-code'),
   amount: document.querySelector('#amount'),
   submitButton: document.querySelector('#submit-button'),
   message: document.querySelector('#form-message'),
@@ -71,6 +73,7 @@ function getFormPayload() {
     action: 'submitPrediction',
     firstName: String(formData.get('firstName') || '').trim(),
     lastName: String(formData.get('lastName') || '').trim(),
+    eventCode: String(formData.get('eventCode') || '').trim(),
     gender: String(formData.get('gender') || '').trim(),
     amount: Number(formData.get('amount')),
   };
@@ -87,6 +90,14 @@ function validatePayload(payload) {
 
   if (payload.firstName.length > 40 || payload.lastName.length > 40) {
     return 'Имя и фамилия должны быть короче 40 символов';
+  }
+
+  if (!payload.eventCode) {
+    return 'Введите код события';
+  }
+
+  if (payload.eventCode.length > 24) {
+    return 'Код события должен быть короче 24 символов';
   }
 
   if (payload.gender !== 'boy' && payload.gender !== 'girl') {
@@ -226,3 +237,4 @@ function showMessage(text, type) {
 function clearMessage() {
   showMessage('', '');
 }
+

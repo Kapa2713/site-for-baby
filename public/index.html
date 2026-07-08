@@ -63,6 +63,18 @@
             </label>
           </div>
 
+          <label>
+            <span>Код события</span>
+            <input
+              id="event-code"
+              name="eventCode"
+              type="text"
+              maxlength="24"
+              autocomplete="off"
+              required
+            >
+          </label>
+
           <fieldset class="gender-picker">
             <legend>Выберите вариант</legend>
             <label>
@@ -91,8 +103,8 @@
           <strong>коэффициенты обновятся на сайте</strong>
         </div>
         <div>
-          <span>Источник данных</span>
-          <strong>Google Таблица организаторов</strong>
+          <span>Экран итогов</span>
+          <strong><a href="display.html">открыть display-режим</a></strong>
         </div>
         <div>
           <span>Формат</span>
@@ -101,6 +113,7 @@
       </section>
     </main>
 
+    <script src="config.js"></script>
     <script src="app.js"></script>
   </body>
 </html>
