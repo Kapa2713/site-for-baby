@@ -61,10 +61,7 @@ async function handleSubmit(event) {
     renderState(response);
     elements.form.reset();
     updateGenderState('');
-    showMessage(
-      `Прогноз принят. Ваш коэффициент: ${formatOdds(response.prediction.oddsAtBet)}. Новые коэффициенты уже на странице.`,
-      'success'
-    );
+    showMessage('Прогноз принят.', 'success');
   } catch (error) {
     showMessage(error.message || 'Не удалось сохранить прогноз', 'error');
   } finally {
