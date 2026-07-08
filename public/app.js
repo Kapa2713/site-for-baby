@@ -5,6 +5,8 @@ const SEED_AMOUNT = 1000;
 
 const elements = {
   form: document.querySelector('#prediction-form'),
+  oddsPanel: document.querySelector('#odds-panel'),
+  genderInputs: document.querySelectorAll('input[name="gender"]'),
   firstName: document.querySelector('#first-name'),
   lastName: document.querySelector('#last-name'),
   eventCode: document.querySelector('#event-code'),
@@ -19,11 +21,14 @@ const elements = {
 };
 
 let latestState = null;
+let hasRenderedState = false;
 
 init();
 
 function init() {
   elements.form.addEventListener('submit', handleSubmit);
+  elements.genderInputs.forEach((input) => input.addEventListener('change', handleGenderChange));
+  updateGenderState('');
   refreshState();
 }
 
@@ -55,6 +60,7 @@ async function handleSubmit(event) {
 
     renderState(response);
     elements.form.reset();
+    updateGenderState('');
     showMessage(
       `Прогноз принят. Ваш коэффициент: ${formatOdds(response.prediction.oddsAtBet)}. Новые коэффициенты уже на странице.`,
       'success'
@@ -77,6 +83,10 @@ function getFormPayload() {
     gender: String(formData.get('gender') || '').trim(),
     amount: Number(formData.get('amount')),
   };
+}
+
+function handleGenderChange(event) {
+  updateGenderState(event.target.value);
 }
 
 function validatePayload(payload) {
@@ -105,7 +115,11 @@ function validatePayload(payload) {
   }
 
   if (!Number.isFinite(payload.amount) || payload.amount <= 0) {
-    return 'Введите сумму больше 0';
+    return 'Введите сумму от 100';
+  }
+
+  if (payload.amount < 100) {
+    return 'Минимальная виртуальная сумма — 100';
   }
 
   if (payload.amount > 1000000) {
@@ -213,6 +227,24 @@ function renderState(state) {
   elements.bettingStatus.textContent = state.bettingOpen ? 'прием открыт' : 'прием закрыт';
   elements.bettingStatus.classList.toggle('is-closed', !state.bettingOpen);
   elements.submitButton.disabled = !state.bettingOpen;
+
+  if (hasRenderedState) {
+    flashOddsPanel();
+  }
+
+  hasRenderedState = true;
+}
+
+function updateGenderState(gender) {
+  document.body.classList.toggle('state-boy', gender === 'boy');
+  document.body.classList.toggle('state-girl', gender === 'girl');
+  document.body.classList.toggle('state-neutral', gender !== 'boy' && gender !== 'girl');
+}
+
+function flashOddsPanel() {
+  elements.oddsPanel.classList.remove('is-updated');
+  void elements.oddsPanel.offsetWidth;
+  elements.oddsPanel.classList.add('is-updated');
 }
 
 function formatOdds(value) {
@@ -237,4 +269,3 @@ function showMessage(text, type) {
 function clearMessage() {
   showMessage('', '');
 }
-

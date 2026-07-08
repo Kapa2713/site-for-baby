@@ -3,53 +3,79 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Гендер-пати: прогноз</title>
+    <title>Прогноз: мальчик или девочка?</title>
     <meta
       name="description"
-      content="Развлекательный прогноз для гендер-пати с виртуальными суммами и текущими коэффициентами."
+      content="Развлекательный прогноз с виртуальными суммами и текущими коэффициентами."
     >
     <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="quick-fixes.css">
   </head>
-  <body>
+  <body class="state-neutral">
     <main class="page-shell">
+      <div class="page-character" aria-hidden="true">
+        <div class="state-image state-image--boy"></div>
+        <div class="state-image state-image--girl"></div>
+      </div>
+
       <section class="hero" aria-labelledby="page-title">
         <div class="hero__media" aria-hidden="true"></div>
         <div class="hero__content">
           <h1 id="page-title">Кто будет: мальчик или девочка?</h1>
           <p class="hero__text">
-            Сделайте игровой прогноз. Все суммы виртуальные, без онлайн-оплаты и реальных выигрышей.
+            Сделайте игровой прогноз, а коэффициент зафиксируется в момент подтверждения.
+            Все суммы виртуальные, без онлайн-оплаты и реальных выигрышей.
           </p>
         </div>
       </section>
 
       <section class="workspace" aria-label="Прогноз">
-        <div class="odds-panel" aria-live="polite">
-          <div class="panel-heading">
-            <span>Текущие коэффициенты</span>
-            <span id="betting-status" class="status-pill">загрузка</span>
-          </div>
+        <div class="event-panel">
+          <div id="odds-panel" class="odds-panel" aria-live="polite">
+            <div class="panel-heading">
+              <span>Текущие коэффициенты</span>
+              <span id="betting-status" class="status-pill">загрузка</span>
+            </div>
 
-          <div class="odds-grid">
-            <article class="odds-card odds-card--boy">
-              <span class="odds-card__label">Мальчик</span>
-              <strong id="boy-odds">2.00</strong>
-              <small id="boy-total">0 виртуально</small>
-            </article>
+            <div class="odds-grid">
+              <article class="odds-card odds-card--boy">
+                <span class="odds-card__label">Мальчик</span>
+                <strong id="boy-odds">2.00</strong>
+                <small id="boy-total">0 виртуально</small>
+              </article>
 
-            <article class="odds-card odds-card--girl">
-              <span class="odds-card__label">Девочка</span>
-              <strong id="girl-odds">2.00</strong>
-              <small id="girl-total">0 виртуально</small>
-            </article>
+              <article class="odds-card odds-card--girl">
+                <span class="odds-card__label">Девочка</span>
+                <strong id="girl-odds">2.00</strong>
+                <small id="girl-total">0 виртуально</small>
+              </article>
+            </div>
           </div>
         </div>
 
         <form id="prediction-form" class="prediction-form" novalidate>
           <div class="form-heading">
             <h2>Ваш прогноз</h2>
-            <p>Коэффициент зафиксируется в момент подтверждения.</p>
+            <p>Сначала выберите вариант, затем заполните данные гостя.</p>
           </div>
+
+          <fieldset class="gender-picker">
+            <legend>Выберите вариант</legend>
+            <label class="gender-option gender-option--boy">
+              <input type="radio" name="gender" value="boy" required>
+              <span class="gender-option__content">
+                <span class="gender-option__title">Мальчик</span>
+                <span class="gender-option__hint">голубой прогноз</span>
+              </span>
+            </label>
+            <label class="gender-option gender-option--girl">
+              <input type="radio" name="gender" value="girl" required>
+              <span class="gender-option__content">
+                <span class="gender-option__title">Девочка</span>
+                <span class="gender-option__hint">розовый прогноз</span>
+              </span>
+            </label>
+          </fieldset>
 
           <div class="field-grid">
             <label>
@@ -75,21 +101,9 @@
             >
           </label>
 
-          <fieldset class="gender-picker">
-            <legend>Выберите вариант</legend>
-            <label>
-              <input type="radio" name="gender" value="boy" required>
-              <span>Мальчик</span>
-            </label>
-            <label>
-              <input type="radio" name="gender" value="girl" required>
-              <span>Девочка</span>
-            </label>
-          </fieldset>
-
           <label>
             <span>Виртуальная сумма</span>
-            <input id="amount" name="amount" type="number" min="1" max="1000000" step="1" inputmode="numeric" required>
+            <input id="amount" name="amount" type="number" min="100" max="1000000" step="100" inputmode="numeric" required>
           </label>
 
           <button id="submit-button" type="submit">Подтвердить прогноз</button>
