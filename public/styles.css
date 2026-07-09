@@ -197,15 +197,6 @@ label {
   padding: 92px 0 72px;
 }
 
-.eyebrow {
-  margin: 0 0 12px;
-  color: rgba(32, 35, 42, 0.62);
-  font-size: 12px;
-  font-weight: 850;
-  letter-spacing: 0;
-  text-transform: uppercase;
-}
-
 h1 {
   max-width: 760px;
   margin: 0;
@@ -229,8 +220,13 @@ h1 {
   margin-top: -42px;
 }
 
-.event-panel,
+.event-panel {
+  display: grid;
+  gap: 16px;
+}
+
 .odds-panel,
+.votes-panel,
 .prediction-form,
 .summary-strip {
   border: 1px solid var(--line);
@@ -240,16 +236,8 @@ h1 {
   backdrop-filter: blur(9px) saturate(1.16);
 }
 
-.event-panel {
-  display: grid;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  box-shadow: none;
-  backdrop-filter: none;
-}
-
 .odds-panel,
+.votes-panel,
 .prediction-form {
   padding: 18px;
 }
@@ -279,14 +267,16 @@ h1 {
   background: #ffe5df;
 }
 
-.odds-grid {
+.odds-grid,
+.votes-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
 }
 
-.odds-card {
-  min-height: 132px;
+.odds-card,
+.vote-card {
+  min-height: 116px;
   display: grid;
   align-content: center;
   gap: 8px;
@@ -297,15 +287,18 @@ h1 {
   transition: border-color 240ms ease, transform 240ms ease, box-shadow 240ms ease;
 }
 
-.odds-card--boy {
+.odds-card--boy,
+.vote-card--boy {
   background: linear-gradient(140deg, rgba(255, 255, 255, var(--glass-alpha)), rgba(227, 242, 255, var(--glass-alpha)));
 }
 
-.odds-card--girl {
+.odds-card--girl,
+.vote-card--girl {
   background: linear-gradient(140deg, rgba(255, 255, 255, var(--glass-alpha)), rgba(253, 230, 239, var(--glass-alpha)));
 }
 
-.odds-card__label {
+.odds-card__label,
+.vote-card span {
   color: var(--muted);
   font-size: 13px;
   font-weight: 800;
@@ -317,24 +310,25 @@ h1 {
   letter-spacing: 0;
 }
 
-.odds-card--boy strong {
+.vote-card strong {
+  font-size: 26px;
+  line-height: 1.1;
+  letter-spacing: 0;
+}
+
+.odds-card--boy strong,
+.vote-card--boy strong {
   color: var(--boy-dark);
 }
 
-.odds-card--girl strong {
+.odds-card--girl strong,
+.vote-card--girl strong {
   color: var(--girl-dark);
-}
-
-.odds-card small {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.3;
 }
 
 .odds-panel.is-updated .odds-card {
   animation: oddsPulse 760ms ease;
 }
-
 
 .prediction-form {
   display: grid;
@@ -521,111 +515,6 @@ button:disabled {
   line-height: 1.35;
 }
 
-.summary-strip a,
-.back-link {
-  color: inherit;
-  text-decoration: underline;
-  text-decoration-thickness: 2px;
-  text-underline-offset: 4px;
-}
-
-.display-body {
-  min-height: 100vh;
-  background:
-    linear-gradient(180deg, rgba(255, 248, 240, 0.86), rgba(238, 248, 251, 0.92)),
-    url("assets/hero-gender-party.png") center / cover fixed no-repeat;
-}
-
-.display-screen {
-  min-height: 100vh;
-  width: min(100% - 28px, 1180px);
-  margin: 0 auto;
-  display: grid;
-  align-content: center;
-  gap: 18px;
-  padding: 36px 0;
-  color: var(--ink);
-}
-
-.display-hero {
-  max-width: 820px;
-}
-
-.display-hero h1 {
-  margin: 0;
-  font-size: 46px;
-}
-
-.display-status {
-  display: inline-flex;
-  margin: 20px 0 0;
-  border-radius: 999px;
-  padding: 10px 16px;
-  color: #14532d;
-  background: rgba(220, 252, 231, 0.94);
-  font-weight: 850;
-}
-
-.display-status.is-closed {
-  color: #7f1d1d;
-  background: rgba(254, 226, 226, 0.94);
-}
-
-.display-grid {
-  display: grid;
-  gap: 14px;
-}
-
-.display-card {
-  min-height: 190px;
-  display: grid;
-  align-content: center;
-  gap: 12px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  padding: 24px;
-  background: var(--panel);
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(9px) saturate(1.16);
-}
-
-.display-card span {
-  color: var(--muted);
-  font-size: 17px;
-  font-weight: 850;
-}
-
-.display-card strong {
-  font-size: 68px;
-  line-height: 0.95;
-}
-
-.display-card small {
-  color: var(--muted);
-  font-size: 17px;
-}
-
-.display-card--boy strong {
-  color: var(--boy-dark);
-}
-
-.display-card--girl strong {
-  color: var(--girl-dark);
-}
-
-.display-message {
-  min-height: 24px;
-  margin: 0;
-  color: #5a6372;
-  font-size: 16px;
-}
-
-.back-link {
-  width: fit-content;
-  color: #344054;
-  font-weight: 800;
-}
-
 @keyframes oddsPulse {
   0% {
     box-shadow: 0 0 0 rgba(184, 138, 59, 0);
@@ -660,6 +549,7 @@ button:disabled {
   }
 
   .odds-grid,
+  .votes-grid,
   .gender-picker {
     grid-template-columns: 1fr;
   }
@@ -668,8 +558,7 @@ button:disabled {
 @media (min-width: 560px) {
   .hero__content,
   .workspace,
-  .summary-strip,
-  .display-screen {
+  .summary-strip {
     width: min(100% - 40px, 1120px);
   }
 
@@ -686,7 +575,7 @@ button:disabled {
   }
 
   .summary-strip {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .summary-strip div {
@@ -696,10 +585,6 @@ button:disabled {
 
   .summary-strip div:last-child {
     border-right: 0;
-  }
-
-  .display-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
@@ -724,20 +609,27 @@ button:disabled {
   }
 
   .event-panel {
-    padding: 0;
+    order: 1;
+  }
+
+  .prediction-form {
+    order: 2;
   }
 
   .odds-panel,
+  .votes-panel,
   .prediction-form {
     padding: 24px;
   }
 
-  .odds-grid {
+  .odds-grid,
+  .votes-grid {
     gap: 16px;
   }
 
-  .odds-card {
-    min-height: 190px;
+  .odds-card,
+  .vote-card {
+    min-height: 164px;
     padding: 24px;
   }
 
@@ -745,28 +637,7 @@ button:disabled {
     font-size: 64px;
   }
 
-  .display-screen {
-    gap: 26px;
-  }
-
-  .display-hero h1 {
-    font-size: clamp(72px, 9vw, 112px);
-  }
-
-  .display-card {
-    min-height: 280px;
-    padding: 34px;
-  }
-
-  .display-card span {
-    font-size: 22px;
-  }
-
-  .display-card strong {
-    font-size: clamp(86px, 10vw, 132px);
-  }
-
-  .display-card small {
-    font-size: 20px;
+  .vote-card strong {
+    font-size: 32px;
   }
 }
