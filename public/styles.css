@@ -223,6 +223,7 @@ h1 {
 .event-panel {
   display: grid;
   gap: 16px;
+  min-width: 0;
 }
 
 .odds-panel,
@@ -276,6 +277,7 @@ h1 {
 
 .odds-card,
 .vote-card {
+  min-width: 0;
   min-height: 116px;
   display: grid;
   align-content: center;
@@ -284,6 +286,7 @@ h1 {
   border-radius: 8px;
   padding: 16px;
   background: var(--panel-solid);
+  overflow: hidden;
   transition: border-color 240ms ease, transform 240ms ease, box-shadow 240ms ease;
 }
 
@@ -305,15 +308,20 @@ h1 {
 }
 
 .odds-card strong {
-  font-size: 44px;
+  max-width: 100%;
+  font-size: clamp(38px, 10vw, 52px);
   line-height: 1;
-  letter-spacing: 0;
+  letter-spacing: -0.04em;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
 
 .vote-card strong {
-  font-size: 26px;
+  max-width: 100%;
+  font-size: clamp(22px, 6vw, 30px);
   line-height: 1.1;
-  letter-spacing: 0;
+  letter-spacing: -0.02em;
+  white-space: nowrap;
 }
 
 .odds-card--boy strong,
@@ -608,14 +616,6 @@ button:disabled {
     margin-top: -70px;
   }
 
-  .event-panel {
-    order: 1;
-  }
-
-  .prediction-form {
-    order: 2;
-  }
-
   .odds-panel,
   .votes-panel,
   .prediction-form {
@@ -629,15 +629,15 @@ button:disabled {
 
   .odds-card,
   .vote-card {
-    min-height: 164px;
+    min-height: 154px;
     padding: 24px;
   }
 
   .odds-card strong {
-    font-size: 64px;
+    font-size: clamp(38px, 3.2vw, 52px);
   }
 
   .vote-card strong {
-    font-size: 32px;
+    font-size: clamp(20px, 2.2vw, 28px);
   }
 }
