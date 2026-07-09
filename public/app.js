@@ -26,6 +26,10 @@ let hasRenderedState = false;
 init();
 
 function init() {
+  if (!elements.form) {
+    return;
+  }
+
   elements.form.addEventListener('submit', handleSubmit);
   elements.genderInputs.forEach((input) => input.addEventListener('change', handleGenderChange));
   updateGenderState('');
@@ -225,14 +229,19 @@ function renderState(state) {
   latestState = state;
   const counts = getCountsFromState(state);
 
-  elements.boyOdds.textContent = formatOdds(state.odds.boy);
-  elements.girlOdds.textContent = formatOdds(state.odds.girl);
-  elements.boyVotes.textContent = formatVoteCount(counts.boy);
-  elements.girlVotes.textContent = formatVoteCount(counts.girl);
+  setElementText(elements.boyOdds, formatOdds(state.odds.boy));
+  setElementText(elements.girlOdds, formatOdds(state.odds.girl));
+  setElementText(elements.boyVotes, formatVoteCount(counts.boy));
+  setElementText(elements.girlVotes, formatVoteCount(counts.girl));
+  setElementText(elements.bettingStatus, state.bettingOpen ? 'прием открыт' : 'прием закрыт');
 
-  elements.bettingStatus.textContent = state.bettingOpen ? 'прием открыт' : 'прием закрыт';
-  elements.bettingStatus.classList.toggle('is-closed', !state.bettingOpen);
-  elements.submitButton.disabled = !state.bettingOpen;
+  if (elements.bettingStatus) {
+    elements.bettingStatus.classList.toggle('is-closed', !state.bettingOpen);
+  }
+
+  if (elements.submitButton) {
+    elements.submitButton.disabled = !state.bettingOpen;
+  }
 
   if (hasRenderedState) {
     flashOddsPanel();
@@ -266,6 +275,10 @@ function updateGenderState(gender) {
 }
 
 function flashOddsPanel() {
+  if (!elements.oddsPanel) {
+    return;
+  }
+
   elements.oddsPanel.classList.remove('is-updated');
   void elements.oddsPanel.offsetWidth;
   elements.oddsPanel.classList.add('is-updated');
@@ -308,16 +321,31 @@ function formatAmount(value) {
 }
 
 function setLoading(isLoading) {
+  if (!elements.submitButton) {
+    return;
+  }
+
   elements.submitButton.disabled = isLoading || latestState?.bettingOpen === false;
   elements.submitButton.textContent = isLoading ? 'Сохраняем...' : 'Подтвердить прогноз';
 }
 
 function showMessage(text, type) {
-  elements.message.textContent = text;
+  setElementText(elements.message, text);
+
+  if (!elements.message) {
+    return;
+  }
+
   elements.message.classList.toggle('is-error', type === 'error');
   elements.message.classList.toggle('is-success', type === 'success');
 }
 
 function clearMessage() {
   showMessage('', '');
+}
+
+function setElementText(element, text) {
+  if (element) {
+    element.textContent = text;
+  }
 }
