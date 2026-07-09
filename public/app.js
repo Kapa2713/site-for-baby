@@ -16,8 +16,8 @@ const elements = {
   bettingStatus: document.querySelector('#betting-status'),
   boyOdds: document.querySelector('#boy-odds'),
   girlOdds: document.querySelector('#girl-odds'),
-  boyTotal: document.querySelector('#boy-total'),
-  girlTotal: document.querySelector('#girl-total'),
+  boyVotes: document.querySelector('#boy-votes'),
+  girlVotes: document.querySelector('#girl-votes'),
 };
 
 let latestState = null;
@@ -167,11 +167,13 @@ async function parseApiResponse(response) {
 function getLocalState() {
   const savedState = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY) || 'null');
   const totals = savedState && savedState.totals ? savedState.totals : { boy: 0, girl: 0 };
+  const counts = savedState && savedState.counts ? savedState.counts : { boy: 0, girl: 0 };
 
   return {
     ok: true,
     bettingOpen: true,
     totals,
+    counts,
     odds: calculateOdds(totals.boy, totals.girl, SEED_AMOUNT),
   };
 }
@@ -183,10 +185,15 @@ function submitLocalPrediction(payload) {
     ...state.totals,
     [payload.gender]: state.totals[payload.gender] + payload.amount,
   };
+  const counts = {
+    ...state.counts,
+    [payload.gender]: state.counts[payload.gender] + 1,
+  };
   const nextState = {
     ok: true,
     bettingOpen: true,
     totals,
+    counts,
     odds: calculateOdds(totals.boy, totals.girl, SEED_AMOUNT),
     prediction: {
       gender: payload.gender,
@@ -195,7 +202,7 @@ function submitLocalPrediction(payload) {
     },
   };
 
-  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({ totals }));
+  localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({ totals, counts }));
   return nextState;
 }
 
@@ -216,10 +223,12 @@ function roundOdds(value) {
 
 function renderState(state) {
   latestState = state;
+  const counts = getCountsFromState(state);
+
   elements.boyOdds.textContent = formatOdds(state.odds.boy);
   elements.girlOdds.textContent = formatOdds(state.odds.girl);
-  elements.boyTotal.textContent = `${formatAmount(state.totals.boy)} виртуально`;
-  elements.girlTotal.textContent = `${formatAmount(state.totals.girl)} виртуально`;
+  elements.boyVotes.textContent = formatVoteCount(counts.boy);
+  elements.girlVotes.textContent = formatVoteCount(counts.girl);
 
   elements.bettingStatus.textContent = state.bettingOpen ? 'прием открыт' : 'прием закрыт';
   elements.bettingStatus.classList.toggle('is-closed', !state.bettingOpen);
@@ -230,6 +239,24 @@ function renderState(state) {
   }
 
   hasRenderedState = true;
+}
+
+function getCountsFromState(state) {
+  const counts = state.counts || state.votes || null;
+
+  if (!counts) {
+    return { boy: null, girl: null };
+  }
+
+  return {
+    boy: normalizeCount(counts.boy),
+    girl: normalizeCount(counts.girl),
+  };
+}
+
+function normalizeCount(value) {
+  const count = Number(value);
+  return Number.isFinite(count) && count >= 0 ? count : null;
 }
 
 function updateGenderState(gender) {
@@ -246,6 +273,34 @@ function flashOddsPanel() {
 
 function formatOdds(value) {
   return Number(value).toFixed(2);
+}
+
+function formatVoteCount(value) {
+  if (value === null) {
+    return '—';
+  }
+
+  const count = Math.trunc(value);
+  return `${formatAmount(count)} ${getVoteWord(count)}`;
+}
+
+function getVoteWord(count) {
+  const lastTwoDigits = count % 100;
+  const lastDigit = count % 10;
+
+  if (lastTwoDigits >= 11 && lastTwoDigits <= 14) {
+    return 'голосов';
+  }
+
+  if (lastDigit === 1) {
+    return 'голос';
+  }
+
+  if (lastDigit >= 2 && lastDigit <= 4) {
+    return 'голоса';
+  }
+
+  return 'голосов';
 }
 
 function formatAmount(value) {
