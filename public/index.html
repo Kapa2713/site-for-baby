@@ -29,29 +29,6 @@
       </section>
 
       <section class="workspace" aria-label="Прогноз">
-        <div class="event-panel">
-          <div id="odds-panel" class="odds-panel" aria-live="polite">
-            <div class="panel-heading">
-              <span>Текущие коэффициенты</span>
-              <span id="betting-status" class="status-pill">загрузка</span>
-            </div>
-
-            <div class="odds-grid">
-              <article class="odds-card odds-card--boy">
-                <span class="odds-card__label">Мальчик</span>
-                <strong id="boy-odds">2.00</strong>
-                <small id="boy-total">0 виртуально</small>
-              </article>
-
-              <article class="odds-card odds-card--girl">
-                <span class="odds-card__label">Девочка</span>
-                <strong id="girl-odds">2.00</strong>
-                <small id="girl-total">0 виртуально</small>
-              </article>
-            </div>
-          </div>
-        </div>
-
         <form id="prediction-form" class="prediction-form" novalidate>
           <div class="form-heading">
             <h2>Ваш прогноз</h2>
@@ -108,20 +85,55 @@
           <button id="submit-button" type="submit">Подтвердить прогноз</button>
           <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
         </form>
+
+        <div class="event-panel">
+          <div id="odds-panel" class="odds-panel" aria-live="polite">
+            <div class="panel-heading">
+              <span>Текущие коэффициенты</span>
+              <span id="betting-status" class="status-pill">загрузка</span>
+            </div>
+
+            <div class="odds-grid">
+              <article class="odds-card odds-card--boy">
+                <span class="odds-card__label">Мальчик</span>
+                <strong id="boy-odds">2.00</strong>
+              </article>
+
+              <article class="odds-card odds-card--girl">
+                <span class="odds-card__label">Девочка</span>
+                <strong id="girl-odds">2.00</strong>
+              </article>
+            </div>
+          </div>
+
+          <div id="votes-panel" class="votes-panel" aria-live="polite">
+            <div class="panel-heading">
+              <span>Количество голосов</span>
+            </div>
+
+            <div class="votes-grid">
+              <article class="vote-card vote-card--boy">
+                <span>Мальчик</span>
+                <strong id="boy-votes">—</strong>
+              </article>
+
+              <article class="vote-card vote-card--girl">
+                <span>Девочка</span>
+                <strong id="girl-votes">—</strong>
+              </article>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section class="summary-strip" aria-label="Итоговая статистика">
         <div>
           <span>После отправки</span>
-          <strong>коэффициенты обновятся на сайте</strong>
-        </div>
-        <div>
-          <span>Экран итогов</span>
-          <strong><a href="display.html">открыть display-режим</a></strong>
+          <strong>коэффициенты и голоса обновятся на сайте</strong>
         </div>
         <div>
           <span>Формат</span>
-          <strong>игровая механика без платежей</strong>
+          <strong>игровая механика без онлайн-оплаты</strong>
         </div>
       </section>
     </main>
