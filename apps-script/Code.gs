@@ -140,14 +140,15 @@ function submitPrediction_(payload) {
 }
 
 function getPublicState_() {
-  const totals = getPredictionTotals_();
+  const predictionStats = getPredictionStats_();
   const seed = Number(getSetting_('seed_amount', '1000')) || 1000;
-  const odds = calculateOdds_(totals.boy, totals.girl, seed);
+  const odds = calculateOdds_(predictionStats.totals.boy, predictionStats.totals.girl, seed);
 
   return {
     bettingOpen: getSetting_('betting_open', 'true') === 'true',
     odds,
-    totals,
+    totals: predictionStats.totals,
+    counts: predictionStats.counts,
   };
 }
 
@@ -166,13 +167,16 @@ function roundOdds_(value) {
   return Math.round(value * 100) / 100;
 }
 
-function getPredictionTotals_() {
+function getPredictionStats_() {
   const sheet = getSpreadsheet_().getSheetByName(SHEETS.PREDICTIONS);
   const lastRow = sheet.getLastRow();
-  const totals = { boy: 0, girl: 0 };
+  const stats = {
+    totals: { boy: 0, girl: 0 },
+    counts: { boy: 0, girl: 0 },
+  };
 
   if (lastRow < 2) {
-    return totals;
+    return stats;
   }
 
   const rows = sheet.getRange(2, 1, lastRow - 1, HEADERS[SHEETS.PREDICTIONS].length).getValues();
@@ -181,12 +185,18 @@ function getPredictionTotals_() {
     const gender = row[4];
     const amount = Number(row[5]);
 
-    if ((gender === 'boy' || gender === 'girl') && Number.isFinite(amount)) {
-      totals[gender] += amount;
+    if (gender !== 'boy' && gender !== 'girl') {
+      return;
+    }
+
+    stats.counts[gender] += 1;
+
+    if (Number.isFinite(amount)) {
+      stats.totals[gender] += amount;
     }
   });
 
-  return totals;
+  return stats;
 }
 
 function validatePrediction_(payload) {
@@ -220,8 +230,8 @@ function validatePrediction_(payload) {
     throw publicError_('Выберите мальчика или девочку');
   }
 
-  if (!Number.isFinite(amount) || amount <= 0) {
-    throw publicError_('Введите сумму больше 0');
+  if (!Number.isFinite(amount) || amount < 100) {
+    throw publicError_('Минимальная виртуальная сумма — 100');
   }
 
   if (amount > 1000000) {
@@ -349,4 +359,3 @@ function publicError_(message) {
 function getPublicErrorMessage_(error) {
   return error && error.publicMessage ? error.publicMessage : 'Не удалось сохранить прогноз';
 }
-
