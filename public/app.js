@@ -1,7 +1,7 @@
 const CONFIG = window.SITE_FOR_BABY_CONFIG || {};
 const APPS_SCRIPT_URL = String(CONFIG.APPS_SCRIPT_URL || '').trim();
 const LOCAL_STORAGE_KEY = 'site-for-baby-demo-state';
-const SEED_AMOUNT = 1000;
+const DEMO_COMMISSION_PERCENT = 10;
 
 const elements = {
   form: document.querySelector('#prediction-form'),
@@ -178,13 +178,13 @@ function getLocalState() {
     bettingOpen: true,
     totals,
     counts,
-    odds: calculateOdds(totals.boy, totals.girl, SEED_AMOUNT),
+    commissionPercent: DEMO_COMMISSION_PERCENT,
+    odds: calculatePoolOdds(totals.boy, totals.girl, DEMO_COMMISSION_PERCENT),
   };
 }
 
 function submitLocalPrediction(payload) {
   const state = getLocalState();
-  const oddsAtBet = state.odds[payload.gender];
   const totals = {
     ...state.totals,
     [payload.gender]: state.totals[payload.gender] + payload.amount,
@@ -193,16 +193,22 @@ function submitLocalPrediction(payload) {
     ...state.counts,
     [payload.gender]: state.counts[payload.gender] + 1,
   };
+  const odds = calculatePoolOdds(
+    totals.boy,
+    totals.girl,
+    DEMO_COMMISSION_PERCENT
+  );
   const nextState = {
     ok: true,
     bettingOpen: true,
     totals,
     counts,
-    odds: calculateOdds(totals.boy, totals.girl, SEED_AMOUNT),
+    commissionPercent: DEMO_COMMISSION_PERCENT,
+    odds,
     prediction: {
       gender: payload.gender,
       amount: payload.amount,
-      oddsAtBet,
+      oddsAtBet: odds[payload.gender],
     },
   };
 
@@ -210,14 +216,21 @@ function submitLocalPrediction(payload) {
   return nextState;
 }
 
-function calculateOdds(boyTotal, girlTotal, seed) {
-  const boyScore = boyTotal + seed;
-  const girlScore = girlTotal + seed;
-  const totalScore = boyScore + girlScore;
+function calculatePoolOdds(boyTotal, girlTotal, commissionPercent) {
+  const totalPool = boyTotal + girlTotal;
+
+  if (totalPool <= 0) {
+    return {
+      boy: 2,
+      girl: 2,
+    };
+  }
+
+  const prizePool = totalPool * (1 - commissionPercent / 100);
 
   return {
-    boy: roundOdds(totalScore / boyScore),
-    girl: roundOdds(totalScore / girlScore),
+    boy: boyTotal > 0 ? roundOdds(prizePool / boyTotal) : null,
+    girl: girlTotal > 0 ? roundOdds(prizePool / girlTotal) : null,
   };
 }
 
@@ -285,7 +298,8 @@ function flashOddsPanel() {
 }
 
 function formatOdds(value) {
-  return Number(value).toFixed(2);
+  const odds = Number(value);
+  return Number.isFinite(odds) && odds >= 0 ? odds.toFixed(2) : '—';
 }
 
 function formatVoteCount(value) {
