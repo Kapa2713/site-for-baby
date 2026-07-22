@@ -298,6 +298,10 @@ function flashOddsPanel() {
 }
 
 function formatOdds(value) {
+  if (value === null || value === undefined || value === '') {
+    return '—';
+  }
+
   const odds = Number(value);
   return Number.isFinite(odds) && odds >= 0 ? odds.toFixed(2) : '—';
 }
